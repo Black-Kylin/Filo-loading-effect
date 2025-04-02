@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Loading Animation</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #AADBFF 0%, #EEF8FF 100%);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mail-icon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(var(--scale));
+            }
+            50% {
+                transform: translateY(var(--bounce-height)) scale(var(--scale));
+            }
+            100% {
+                transform: translateY(0) scale(var(--scale));
+            }
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2.8em;
+            color: #1d3557;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .filo-logo {
+            height: 40px;
+            width: auto;
+            display: inline-block;
+        }
+
+        .progress-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 600px;
+        }
+
+        .progress-container {
+            height: 40px;
+            background-color: #ffffff;
+            border-radius: 25px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 4px solid #ffffff;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            transition: width 1.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-text {
+            position: absolute;
+            left: 85%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #1d3557;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .progress-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function createMailIcons() {
+            const body = document.body;
+            const numIcons = 20;
+            const gridSize = Math.ceil(Math.sqrt(numIcons));
+
+            for (let i = 0; i < numIcons; i++) {
+                const icon = document.createElement('img');
+                icon.src = 'mailicon.svg';
+                icon.className = 'mail-icon';
+                
+                const scale = 0.8 + Math.random() * 0.4; // 随机大小在0.8-1.2之间
+                const bounceHeight = -(10 + Math.random() * 10); // 随机跳动高度在10-20px之间
+                const duration = 2 + Math.random(); // 动画时间2-3秒
+                const delay = Math.random() * 3;
+
+                // 计算网格位置
+                const row = Math.floor(i / gridSize);
+                const col = i % gridSize;
+                const baseLeft = (col + 0.5) * (100 / gridSize);
+                const baseTop = (row + 0.5) * (100 / gridSize);
+                
+                // 添加一些随机偏移，但保持在网格单元内
+                const offsetRange = 15;
+                const randomLeft = baseLeft + (Math.random() - 0.5) * offsetRange;
+                const randomTop = baseTop + (Math.random() - 0.5) * offsetRange;
+
+                icon.style.cssText = `
+                    --scale: ${scale};
+                    --bounce-height: ${bounceHeight}px;
+                    left: ${randomLeft}%;
+                    top: ${randomTop}%;
+                    animation: float ${duration}s ease-in-out ${delay}s infinite;
+                `;
+
+                body.appendChild(icon);
+            }
+        }
+    </script>
+
+    <div class="container">
+        <div class="title">Bring <img src="filo.svg" class="filo-logo" alt="Filo Logo"> to Life<span class="dots">...</span></div>
+        <div class="progress-wrapper">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-text">60%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateDots() {
+            const dots = document.querySelector('.dots');
+            let count = 0;
+            setInterval(() => {
+                dots.textContent = '.'.repeat((count % 3) + 1);
+                count++;
+            }, 500);
+        }
+
+        function animateProgress() {
+            const progressBar = document.querySelector('.progress-bar');
+            setTimeout(() => {
+                progressBar.style.width = '60%';
+            }, 100);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDots();
+            animateProgress();
+            createMailIcons();
+        });
+    </script>
+</body>
+</html>

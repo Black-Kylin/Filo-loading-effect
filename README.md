@@ -1,4 +1,4 @@
-# Filo-loading-effect
+# Simple Loading Bar Project
 
 A lightweight Python implementation of loading bars with two different approaches: a custom console progress bar and a tqdm-based loading bar. This project provides simple yet effective ways to display progress in your command-line applications.
 
